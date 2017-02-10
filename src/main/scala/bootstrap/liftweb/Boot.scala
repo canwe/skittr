@@ -55,30 +55,6 @@ class Boot {
 
   LiftRules.rewrite.prepend(rewriter)
 
-  /* I want make both
-       http://localhost:8080/user_mgt/login
-       http://localhost:8080/index.html
-     work.
-
-     with the following two lines:
-       http://localhost:8080/user_mgt/login
-     works, but access:
-       http://localhost:8080/index.html
-     return:
-     INFO - Service request (GET) /index.html returned 404
-  val entries = User.menus
-  LiftRules.setSiteMap(SiteMap(entries: _*))
-  */
-
-  /* How to make the following compile?
-  */
-  def sitemap = SiteMap(
-      Menu.i("Home") / "index" >> User.AddUserMenusAfter,
-      User.menus
-    )
-  def sitemapMutators = User.sitemapMutator
-  LiftRules.setSiteMapFunc(() => sitemapMutators(sitemap))
-
   // load up the list of user actors
   UserList.create
   }
@@ -95,8 +71,8 @@ object DBVendor extends ConnectionManager {
 
       Full(dm)
     } catch {
-      case e : Exception => e.printStackTrace; Empty
+      case e : Exception => e.printStackTrace(); Empty
     }
   }
-  def releaseConnection(conn: Connection) {conn.close}
+  def releaseConnection(conn: Connection) {conn.close()}
 }

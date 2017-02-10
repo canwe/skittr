@@ -47,12 +47,12 @@ object User extends User with MetaMegaProtoUser[User] with KeyedMetaMapper[Long,
   // the number of test users to create
   def createdCount = 1000
 
-  def createTestUsers {
+  def createTestUsers() {
     (1 to createdCount).foreach {
       i =>
 
       User.create.firstName("Mr.").lastName("User "+i).email("user"+i+"@skittr.com").
-        password("my_pwd_"+i).name("test"+i).dontStart.saveMe
+        password("my_pwd_"+i).name("test"+i).dontStart.saveMe()
     }
 
     (1 to createdCount * 7).foreach {
@@ -60,7 +60,7 @@ object User extends User with MetaMegaProtoUser[User] with KeyedMetaMapper[Long,
       val owner = randomLong(createdCount) + 1
       val friend = randomLong(createdCount) + 1
       if (owner != friend && Friend.count(By(Friend.friend, friend), By(Friend.owner, owner)) == 0) {
-        Friend.create.owner(owner).friend(friend).save
+        Friend.create.owner(owner).friend(friend).save()
       }
     }
 
@@ -68,8 +68,7 @@ object User extends User with MetaMegaProtoUser[User] with KeyedMetaMapper[Long,
 
   val validName = Pattern.compile("^[a-z0-9_]{3,30}$")
 
-  override def screenWrap = Full(<lift:surround with="default" at="content">
-			       <lift:bind /></lift:surround>)
+  override def screenWrap = Full(<lift:surround with="default" at="content"><lift:bind /></lift:surround>)
 
 }
 
